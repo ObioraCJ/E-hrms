@@ -60,10 +60,14 @@ api.interceptors.response.use(
         processQueue(null, data.accessToken);
         originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
         return api(originalRequest);
-      } catch (refreshError) {
+   } catch (refreshError) {
         processQueue(refreshError, null);
         localStorage.removeItem('accessToken');
-        window.location.href = '/login';
+        // No forced page reload here. AuthContext already sets user to
+        // null on failure, and ProtectedRoute naturally redirects to
+        // /login based on that state - a hard reload here was creating
+        // a loop (assigning window.location.href to the same URL you're
+        // already on still triggers a real page reload in Chrome).
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

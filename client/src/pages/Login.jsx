@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logo from "../assets/Ehrm.png";
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -39,8 +40,9 @@ export default function Login() {
           {/* Left side: form */}
           <div className="max-w-md mx-auto w-full p-2 md:p-4">
             <div className="mb-10">
-              <h1 className="text-2xl font-bold text-slate-900">E-HRMS</h1>
-              <p className="text-sm text-slate-500 mt-1">Employee HR Management System</p>
+              <h1 className="text-2xl font-bold text-slate-900"> 
+                <img src={logo} alt="E-HRMS logo" className="h-10 w-auto" /></h1>
+              <p className="text-sm text-slate-500 mt-1">E-Human Resource Management System</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">

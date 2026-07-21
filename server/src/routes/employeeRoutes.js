@@ -17,10 +17,10 @@ const { protect, authorize } = require('../middleware/auth');
 // require admin/hr_manager privileges (authorize) - regular employees
 // shouldn't be able to create, edit, or remove other employees' records.
 
-router.post('/', protect, authorize('admin', 'hr_manager'), createEmployeeValidator, createEmployee);
-router.get('/', protect, authorize('admin', 'hr_manager'), getEmployees);
-router.get('/:id', protect, authorize('admin', 'hr_manager'), getEmployeeById);
-router.put('/:id', protect, authorize('admin', 'hr_manager'), updateEmployeeValidator, updateEmployee);
-router.delete('/:id', protect, authorize('admin'), deleteEmployee);
+router.post('/', protect, authorize('super_admin', 'hr_manager'), createEmployeeValidator, createEmployee);
+router.get('/', protect, authorize('super_admin', 'hr_manager', 'department_manager'), getEmployees);
+router.get('/:id', protect, authorize('super_admin', 'hr_manager', 'department_manager'), getEmployeeById);
+router.put('/:id', protect, authorize('super_admin', 'hr_manager'), updateEmployeeValidator, updateEmployee);
+router.delete('/:id', protect, authorize('super_admin'), deleteEmployee);
 
 module.exports = router;

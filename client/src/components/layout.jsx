@@ -6,7 +6,7 @@ export default function Layout() {
   const { user, logout } = useAuth();
    const location = useLocation();
 
-     const canManageEmployees = user?.role === 'admin' || user?.role === 'hr_manager';
+     const canManageEmployees = user?.role === 'super_admin' || user?.role === 'hr_manager' || user?.role === 'department_manager';
 
      const navLinkClasses = (path) =>
   `px-3 py-2 text-sm font-medium rounded-md transition ${

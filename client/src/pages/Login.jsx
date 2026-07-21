@@ -42,7 +42,7 @@ export default function Login() {
             <div className="mb-10">
               <h1 className="text-2xl font-bold text-slate-900"> 
                 <img src={logo} alt="E-HRMS logo" className="h-10 w-auto" /></h1>
-              <p className="text-sm text-slate-500 mt-1">E-Human Resource Management System</p>
+              <p className="font-Courgettetext-sm text-slate-500 mt-1">E-Human Resource Management System</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">

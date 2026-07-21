@@ -14,11 +14,10 @@ const seed = async () => {
     lastName: 'Admin',
     email: 'admin@hrms.com',
     password: 'ChangeMe123!',
-    role: 'admin',
+    role: 'super_admin',
     isEmailVerified: true,
   });
   console.log('Admin created: admin@hrms.com / ChangeMe123!');
   process.exit(0);
 };
-
 seed();

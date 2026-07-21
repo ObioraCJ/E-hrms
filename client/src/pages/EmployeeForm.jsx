@@ -139,7 +139,7 @@ export default function EmployeeForm() {
               name="role"
               value={form.role}
               onChange={handleChange}
-              options={['employee', 'hr_manager', 'admin']}
+              options={['employee', 'department_manager', 'hr_manager', 'super_admin']}
             />
           </>
         )}

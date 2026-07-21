@@ -4,7 +4,7 @@ const { register, login, refresh, logout, getMe } = require('../controllers/auth
 const { registerValidator, loginValidator } = require('../validators/authValidators');
 const { protect, authorize } = require('../middleware/auth');
 
-router.post('/register', protect, authorize('admin'), registerValidator, register);
+router.post('/register', protect, authorize('super_admin'), registerValidator, register);
 router.post('/login', loginValidator, login);
 router.post('/refresh', refresh);
 router.post('/logout', logout);

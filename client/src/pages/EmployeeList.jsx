@@ -12,7 +12,7 @@ export default function EmployeeList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const canDelete = user?.role === 'admin';
+  const canDelete = user?.role === 'super_admin';
 
    const fetchEmployees = useCallback(async (page = 1) => {
     setLoading(true);

@@ -17,7 +17,7 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
 
-            <Route element={<ProtectedRoute allowedRoles={['admin', 'hr_manager']} />}>
+            <Route element={<ProtectedRoute allowedRoles={['super_admin', 'hr_manager', 'department_manager']} />}>
               <Route path="/employees" element={<EmployeeList />} />
               <Route path="/employees/new" element={<EmployeeForm />} />
               <Route path="/employees/:id/edit" element={<EmployeeForm />} />

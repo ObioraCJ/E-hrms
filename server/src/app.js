@@ -7,6 +7,8 @@ const morgan = require('morgan');
 
 const authRoutes = require('./routes/authRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
+const departmentRoutes = require('./routes/departmentRoutes');
+
 
 const app = express();
 
@@ -18,6 +20,7 @@ app.use(morgan('dev'));
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 app.use('/api/auth', authRoutes);
 app.use('/api/employees', employeeRoutes);
+app.use('/api/departments', departmentRoutes);
 
 app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
 

@@ -6,6 +6,9 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import EmployeeList from './pages/EmployeeList';
 import EmployeeForm from './pages/EmployeeForm';
+import DepartmentList from './pages/DepartmentList';
+import DepartmentForm from './pages/DepartmentForm';
+
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
               <Route path="/employees" element={<EmployeeList />} />
               <Route path="/employees/new" element={<EmployeeForm />} />
               <Route path="/employees/:id/edit" element={<EmployeeForm />} />
+              <Route path="/departments" element={<DepartmentList />} />
+              <Route path="/departments/new" element={<DepartmentForm />} />
+              <Route path="/departments/:id/edit" element={<DepartmentForm />} />
             </Route>
           </Route>
         </Route>

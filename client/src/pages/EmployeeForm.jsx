@@ -108,16 +108,16 @@ export default function EmployeeForm() {
   };
 
   if (loading) {
-    return <p className="text-gray-500">Loading...</p>;
+    return <p className="text-slate-400">Loading...</p>;
   }
 
   return (
     <div className="max-w-2xl">
-      <h1 className="mb-6 text-xl font-bold text-blue-900">
+      <h1 className="mb-6 text-xl font-semibold text-slate-900">
         {isEditMode ? 'Edit Employee' : 'Add Employee'}
       </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-5 rounded-xl border border-gray-200 bg-white p-6">
+      <form onSubmit={handleSubmit} className="space-y-5 rounded-xl border border-slate-200 bg-white p-6">
         {!isEditMode && (
           <>
             <div className="grid grid-cols-2 gap-4">
@@ -207,14 +207,14 @@ export default function EmployeeForm() {
           <button
             type="submit"
             disabled={submitting}
-            className="rounded-lg bg-blue-900 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 disabled:opacity-50"
+            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
           >
             {submitting ? 'Saving...' : isEditMode ? 'Save Changes' : 'Create Employee'}
           </button>
           <button
             type="button"
             onClick={() => navigate('/employees')}
-            className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+            className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
           >
             Cancel
           </button>
@@ -227,7 +227,7 @@ export default function EmployeeForm() {
 function Field({ label, name, type = 'text', value, onChange, required, placeholder }) {
   return (
     <div>
-      <label htmlFor={name} className="mb-1 block text-sm font-medium text-gray-700">
+      <label htmlFor={name} className="mb-1 block text-sm font-medium text-slate-700">
         {label}
       </label>
       <input
@@ -238,7 +238,7 @@ function Field({ label, name, type = 'text', value, onChange, required, placehol
         onChange={onChange}
         required={required}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-900"
+        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
       />
     </div>
   );
@@ -247,7 +247,7 @@ function Field({ label, name, type = 'text', value, onChange, required, placehol
 function SelectField({ label, name, value, onChange, options }) {
   return (
     <div>
-      <label htmlFor={name} className="mb-1 block text-sm font-medium text-gray-700">
+      <label htmlFor={name} className="mb-1 block text-sm font-medium text-slate-700">
         {label}
       </label>
       <select
@@ -255,7 +255,7 @@ function SelectField({ label, name, value, onChange, options }) {
         name={name}
         value={value}
         onChange={onChange}
-        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-900"
+        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
       >
         {options.map((opt) => (
           <option key={opt} value={opt}>

@@ -8,6 +8,8 @@ import EmployeeList from './pages/EmployeeList';
 import EmployeeForm from './pages/EmployeeForm';
 import DepartmentList from './pages/DepartmentList';
 import DepartmentForm from './pages/DepartmentForm';
+import AttendanceList from './pages/AttendanceList';
+import AttendanceForm from './pages/AttendanceForm';
 
 
 function App() {
@@ -27,6 +29,9 @@ function App() {
               <Route path="/departments" element={<DepartmentList />} />
               <Route path="/departments/new" element={<DepartmentForm />} />
               <Route path="/departments/:id/edit" element={<DepartmentForm />} />
+              <Route path="/attendance" element={<AttendanceList />} />
+              <Route path="/attendance/new" element={<AttendanceForm />} />
+              <Route path="/attendance/:id/edit" element={<AttendanceForm />} />
             </Route>
           </Route>
         </Route>

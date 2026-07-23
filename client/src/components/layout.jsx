@@ -38,6 +38,9 @@ export default function Layout() {
                   <Link to="/departments" className={navLinkClasses('/departments')}>
                     Departments
                   </Link>
+                  <Link to="/attendance" className={navLinkClasses('/attendance')}>
+                    Attendance
+                 </Link>
                 </>
               )}
             </nav>

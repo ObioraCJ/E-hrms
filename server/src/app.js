@@ -11,6 +11,7 @@ const departmentRoutes = require('./routes/departmentRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const attendanceRoutes = require('./routes/attendanceRoutes');
 const leaveRoutes = require('./routes/leaveRoutes');
+const payrollRoutes = require('./routes/payrollRoutes');
 
 
 const app = express();
@@ -27,6 +28,7 @@ app.use('/api/departments', departmentRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/leaves', leaveRoutes);
+app.use('/api/payroll', payrollRoutes);
 
 app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
 

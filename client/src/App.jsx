@@ -12,6 +12,10 @@ import AttendanceList from './pages/AttendanceList';
 import AttendanceForm from './pages/AttendanceForm';
 import MyLeave from './pages/MyLeave';
 import LeaveManagement from './pages/LeaveManagement';
+import MyPayslips from './pages/MyPayslips';
+import PayslipDetail from './pages/PayslipDetail';
+import PayrollManagement from './pages/PayrollManagement';
+import PayrollForm from './pages/PayrollForm';
 
 
 function App() {
@@ -24,6 +28,8 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/my-leave" element={<MyLeave />} />
+            <Route path="/my-payslips" element={<MyPayslips />} />
+              <Route path="/my-payslips/:id" element={<PayslipDetail />} />
 
             <Route element={<ProtectedRoute allowedRoles={['super_admin', 'hr_manager', 'department_manager']} />}>
               <Route path="/employees" element={<EmployeeList />} />
@@ -36,6 +42,11 @@ function App() {
               <Route path="/attendance/new" element={<AttendanceForm />} />
               <Route path="/attendance/:id/edit" element={<AttendanceForm />} />
               <Route path="/leave-management" element={<LeaveManagement />} />
+            </Route>
+
+            <Route element={<ProtectedRoute allowedRoles={['super_admin', 'hr_manager']} />}>
+              <Route path="/payroll" element={<PayrollManagement />} />
+              <Route path="/payroll/:id/edit" element={<PayrollForm />} />
             </Route>
           </Route>
         </Route>

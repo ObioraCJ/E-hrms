@@ -10,6 +10,8 @@ import DepartmentList from './pages/DepartmentList';
 import DepartmentForm from './pages/DepartmentForm';
 import AttendanceList from './pages/AttendanceList';
 import AttendanceForm from './pages/AttendanceForm';
+import MyLeave from './pages/MyLeave';
+import LeaveManagement from './pages/LeaveManagement';
 
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/my-leave" element={<MyLeave />} />
 
             <Route element={<ProtectedRoute allowedRoles={['super_admin', 'hr_manager', 'department_manager']} />}>
               <Route path="/employees" element={<EmployeeList />} />
@@ -32,6 +35,7 @@ function App() {
               <Route path="/attendance" element={<AttendanceList />} />
               <Route path="/attendance/new" element={<AttendanceForm />} />
               <Route path="/attendance/:id/edit" element={<AttendanceForm />} />
+              <Route path="/leave-management" element={<LeaveManagement />} />
             </Route>
           </Route>
         </Route>

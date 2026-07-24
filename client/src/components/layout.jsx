@@ -30,6 +30,9 @@ export default function Layout() {
               <Link to="/dashboard" className={navLinkClasses('/dashboard')}>
                 Dashboard
               </Link>
+               <Link to="/my-leave" className={navLinkClasses('/my-leave')}>
+                My Leave
+               </Link>
               {canManageEmployees && (
                 <>
                   <Link to="/employees" className={navLinkClasses('/employees')}>
@@ -41,6 +44,9 @@ export default function Layout() {
                   <Link to="/attendance" className={navLinkClasses('/attendance')}>
                     Attendance
                  </Link>
+                 <Link to="/leave-management" className={navLinkClasses('/leave-management')}>
+                   Leave Management
+                </Link>
                 </>
               )}
             </nav>

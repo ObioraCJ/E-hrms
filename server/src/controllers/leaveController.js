@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const Leave = require('../models/Leave');
 const Employee = require('../models/Employee');
+const { createNotification } = require('../utils/createNotification');
 
 // Simple hardcoded annual allocations per leave type, in days. A future
 // Settings module could make these configurable per company instead of
@@ -182,6 +183,18 @@ exports.reviewLeave = async (req, res) => {
       path: 'employee',
       select: 'employeeId department user',
       populate: { path: 'user', select: 'firstName lastName' },
+    });
+
+      // Notify the employee whose request this was, using their User
+    // account (leave.employee.user) as the recipient - not the
+    // Employee record itself, since notifications are always tied to
+    // a login account.
+    await createNotification({
+      recipient: leave.employee.user._id,
+      type: status === 'approved' ? 'leave_approved' : 'leave_rejected',
+      title: `Leave request ${status}`,
+      message: `Your ${leave.leaveType} leave request (${leave.numberOfDays} day${leave.numberOfDays !== 1 ? 's' : ''}) has been ${status}.`,
+      link: '/my-leave',
     });
 
     res.status(200).json({ message: `Leave request ${status}`, leave });

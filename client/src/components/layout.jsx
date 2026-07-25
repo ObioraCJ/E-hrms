@@ -40,6 +40,7 @@ export default function Layout() {
     { to: '/departments', label: 'Departments', show: canManageEmployees },
     { to: '/attendance', label: 'Attendance', show: canManageEmployees },
     { to: '/leave-management', label: 'Leave Management', show: canManageEmployees },
+    { to: '/reports', label: 'Reports', show: canManageEmployees },
     { to: '/payroll', label: 'Payroll', show: canManagePayroll },
     { to: '/announcements', label: 'Announcements', show: canManagePayroll },
   ].filter((link) => link.show);

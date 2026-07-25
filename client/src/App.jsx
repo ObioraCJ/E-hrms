@@ -17,6 +17,7 @@ import PayslipDetail from './pages/PayslipDetail';
 import PayrollManagement from './pages/PayrollManagement';
 import PayrollForm from './pages/PayrollForm';
 import Announcements from './pages/Announcements';
+import Reports from './pages/Reports';
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
               <Route path="/attendance/new" element={<AttendanceForm />} />
               <Route path="/attendance/:id/edit" element={<AttendanceForm />} />
               <Route path="/leave-management" element={<LeaveManagement />} />
+              <Route path="/reports" element={<Reports />} />
             </Route>
 
             <Route element={<ProtectedRoute allowedRoles={['super_admin', 'hr_manager']} />}>

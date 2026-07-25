@@ -16,6 +16,7 @@ import MyPayslips from './pages/MyPayslips';
 import PayslipDetail from './pages/PayslipDetail';
 import PayrollManagement from './pages/PayrollManagement';
 import PayrollForm from './pages/PayrollForm';
+import Announcements from './pages/Announcements';
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
             <Route element={<ProtectedRoute allowedRoles={['super_admin', 'hr_manager']} />}>
               <Route path="/payroll" element={<PayrollManagement />} />
               <Route path="/payroll/:id/edit" element={<PayrollForm />} />
+              <Route path="/announcements" element={<Announcements />} />
             </Route>
           </Route>
         </Route>

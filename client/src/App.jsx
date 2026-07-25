@@ -18,6 +18,7 @@ import PayrollManagement from './pages/PayrollManagement';
 import PayrollForm from './pages/PayrollForm';
 import Announcements from './pages/Announcements';
 import Reports from './pages/Reports';
+import Settings from './pages/Settings';
 
 
 function App() {
@@ -54,7 +55,11 @@ function App() {
             </Route>
           </Route>
         </Route>
-
+        
+        <Route element={<ProtectedRoute allowedRoles={['super_admin']} />}>
+          <Route path="/settings" element={<Settings />} />
+        </Route>
+        
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </AuthProvider>

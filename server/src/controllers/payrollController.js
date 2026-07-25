@@ -2,14 +2,12 @@ const { validationResult } = require('express-validator');
 const Payroll = require('../models/Payroll');
 const Employee = require('../models/Employee');
 const { createNotificationForMany } = require('../utils/createNotification');
+const getSettings = require('../utils/getSettings');
 
 // Simple flat-rate assumptions, since there's no Settings module yet
 // for company-specific tax brackets or pension percentages. These are
 // deliberately basic placeholders - a real payroll system would need
 // proper tax bracket logic, which varies heavily by country/region.
-const TAX_RATE = 0.1; // 10% flat tax on gross pay
-const PENSION_RATE = 0.08; // 8% of basic salary
-
 // Given the raw inputs, computes gross pay, total deductions, and net
 // pay. Pulled into one function since both generatePayroll (creating
 // new records) and updatePayroll (editing a draft) need to redo this
@@ -23,15 +21,14 @@ const computePayroll = ({
   tax,
   pension,
   otherDeductions = 0,
+  taxRate,
+  pensionRate,
 }) => {
   const overtimePay = overtimeHours * overtimeRate;
   const grossPay = basicSalary + allowances + overtimePay + bonuses;
 
-  // If tax/pension weren't explicitly provided, auto-calculate using
-  // the flat rates above - but if HR explicitly set a value (e.g.
-  // during an update), respect that instead of overwriting it.
-  const computedTax = tax !== undefined ? tax : grossPay * TAX_RATE;
-  const computedPension = pension !== undefined ? pension : basicSalary * PENSION_RATE;
+  const computedTax = tax !== undefined ? tax : grossPay * taxRate;
+  const computedPension = pension !== undefined ? pension : basicSalary * pensionRate;
 
   const totalDeductions = computedTax + computedPension + otherDeductions;
   const netPay = grossPay - totalDeductions;
@@ -45,7 +42,6 @@ const computePayroll = ({
     netPay: Number(netPay.toFixed(2)),
   };
 };
-
 // ---- GENERATE (bulk, for a given month/year) ----
 // Creates a draft payroll record for every active employee who
 // doesn't already have one for this period. Skips anyone who already
@@ -57,6 +53,7 @@ exports.generatePayroll = async (req, res) => {
 
   try {
     const { month, year } = req.body;
+    const settings = await getSettings();
 
     const activeEmployees = await Employee.find({ status: 'active' });
 
@@ -70,7 +67,11 @@ exports.generatePayroll = async (req, res) => {
     const skippedNoSalary = activeEmployees.filter((emp) => !emp.salary).length;
 
     const records = toCreate.map((emp) => {
-      const calc = computePayroll({ basicSalary: emp.salary });
+      const calc = computePayroll({
+        basicSalary: emp.salary,
+        taxRate: settings.payrollRates.taxRate,
+        pensionRate: settings.payrollRates.pensionRate,
+      });
       return {
         employee: emp._id,
         month,
@@ -88,7 +89,6 @@ exports.generatePayroll = async (req, res) => {
 
     const created = records.length > 0 ? await Payroll.insertMany(records) : [];
 
-
     res.status(201).json({
       message: `Generated ${created.length} payroll record(s)`,
       generated: created.length,
@@ -99,7 +99,6 @@ exports.generatePayroll = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
-
 // ---- LIST (HR/managers, with filters) ----
 exports.getPayrolls = async (req, res) => {
   try {
@@ -157,6 +156,8 @@ exports.updatePayroll = async (req, res) => {
       return res.status(400).json({ message: 'Only draft payroll records can be edited' });
     }
 
+    const settings = await getSettings();
+
     const fields = ['allowances', 'overtimeHours', 'overtimeRate', 'bonuses', 'tax', 'pension', 'otherDeductions'];
     fields.forEach((field) => {
       if (req.body[field] !== undefined) payroll[field] = req.body[field];
@@ -168,12 +169,11 @@ exports.updatePayroll = async (req, res) => {
       overtimeHours: payroll.overtimeHours,
       overtimeRate: payroll.overtimeRate,
       bonuses: payroll.bonuses,
-      // Only pass tax/pension through if THIS request explicitly set
-      // them - otherwise let computePayroll auto-calculate from rates,
-      // preserving the "explicit overrides auto-calc" behavior.
       tax: req.body.tax !== undefined ? payroll.tax : undefined,
       pension: req.body.pension !== undefined ? payroll.pension : undefined,
       otherDeductions: payroll.otherDeductions,
+      taxRate: settings.payrollRates.taxRate,
+      pensionRate: settings.payrollRates.pensionRate,
     });
 
     payroll.grossPay = calc.grossPay;

@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const Attendance = require('../models/Attendance');
+const getSettings = require('../utils/getSettings');
 
 // Shared helper: given clockIn/clockOut/breakMinutes, computes
 // workingHours the same way regardless of whether this is a create

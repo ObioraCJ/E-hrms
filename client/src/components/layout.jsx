@@ -32,6 +32,7 @@ export default function Layout() {
     { to: '/my-payslips', label: 'My Payslips' },
   ];
 
+  const canManageSettings = user?.role === 'super_admin';
   // Links that only show up for HR/admin/department-manager roles,
   // tucked into the "Manage" dropdown instead of the main row so the
   // top-level nav doesn't get overcrowded as more modules get added.
@@ -43,6 +44,7 @@ export default function Layout() {
     { to: '/reports', label: 'Reports', show: canManageEmployees },
     { to: '/payroll', label: 'Payroll', show: canManagePayroll },
     { to: '/announcements', label: 'Announcements', show: canManagePayroll },
+    { to: '/settings', label: 'Settings', show: canManageSettings },
   ].filter((link) => link.show);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);

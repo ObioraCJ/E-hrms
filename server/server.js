@@ -1,6 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const app = require('./src/app');   // ← was './app', now points into src/
+const { startBirthdayReminderJob } = require('./src/utils/birthdayReminderJob');
 
 const PORT = process.env.PORT || 5000;
 
@@ -9,6 +10,7 @@ mongoose
   .then(() => {
     console.log('MongoDB connected');
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+     startBirthdayReminderJob();
   })
   .catch((err) => {
     console.error('MongoDB connection error:');

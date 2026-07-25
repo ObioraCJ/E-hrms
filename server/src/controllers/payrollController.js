@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const Payroll = require('../models/Payroll');
 const Employee = require('../models/Employee');
+const { createNotificationForMany } = require('../utils/createNotification');
 
 // Simple flat-rate assumptions, since there's no Settings module yet
 // for company-specific tax brackets or pension percentages. These are
@@ -86,6 +87,7 @@ exports.generatePayroll = async (req, res) => {
     });
 
     const created = records.length > 0 ? await Payroll.insertMany(records) : [];
+
 
     res.status(201).json({
       message: `Generated ${created.length} payroll record(s)`,
@@ -211,6 +213,25 @@ exports.updatePayrollStatus = async (req, res) => {
 
     payroll.status = status;
     await payroll.save();
+
+   // Only notify when moving into 'finalized' - this is the point
+    // where numbers are locked in and genuinely ready for the employee
+    // to see, not when the draft was first generated (which could
+    // still change).
+    if (status === 'finalized') {
+      const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December',
+      ];
+      await createNotification({
+        recipient: payroll.employee.user,
+        type: 'payroll_generated',
+        title: 'Payslip ready',
+        message: `Your payslip for ${monthNames[payroll.month - 1]} ${payroll.year} is ready to view.`,
+        link: '/my-payslips',
+      });
+    }
+
 
     res.status(200).json({ message: `Payroll marked as ${status}`, payroll });
   } catch (err) {

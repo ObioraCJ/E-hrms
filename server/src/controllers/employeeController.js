@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const Employee = require('../models/Employee');
 const User = require('../models/User');
 const generateEmployeeId = require('../utils/generateEmployeeId');
+const { createNotificationForMany } = require('../utils/createNotification');
 
 // ---- CREATE ----
 // Creates a User (login credentials) and an Employee (HR profile) together,
@@ -65,6 +66,25 @@ exports.createEmployee = async (req, res) => {
     // actual user document (only the listed fields), so the response
     // is immediately useful to the frontend without a second request.
     await employee.populate('user', 'firstName lastName email role isActive');
+
+     // Notify HR/admin users (not department_manager, and not the new
+    // hire themselves - this is an internal "someone was added" alert
+    // for the people who manage the roster, not a welcome message).
+    const hrUsers = await User.find({
+      role: { $in: ['super_admin', 'hr_manager'] },
+      isActive: true,
+      _id: { $ne: req.user._id }, // don't notify whoever just did this action about their own action
+    }).select('_id');
+
+    if (hrUsers.length > 0) {
+      await createNotificationForMany({
+        recipients: hrUsers.map((u) => u._id),
+        type: 'new_employee',
+        title: 'New employee added',
+        message: `${firstName} ${lastName} has joined ${department} as ${designation}.`,
+        link: '/employees',
+      });
+    }
 
     res.status(201).json({ message: 'Employee created successfully', employee });
   } catch (err) {

@@ -19,6 +19,10 @@ import PayrollForm from './pages/PayrollForm';
 import Announcements from './pages/Announcements';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import MyReviews from './pages/MyReviews';
+import MyReviewDetail from './pages/MyReviewDetail';
+import PerformanceReviewList from './pages/PerformanceReviewList';
+import PerformanceReviewForm from './pages/PerformanceReviewForm';
 
 
 function App() {
@@ -33,6 +37,8 @@ function App() {
             <Route path="/my-leave" element={<MyLeave />} />
             <Route path="/my-payslips" element={<MyPayslips />} />
               <Route path="/my-payslips/:id" element={<PayslipDetail />} />
+              <Route path="/my-reviews" element={<MyReviews />} />
+              <Route path="/my-reviews/:id" element={<MyReviewDetail />} />
 
             <Route element={<ProtectedRoute allowedRoles={['super_admin', 'hr_manager', 'department_manager']} />}>
               <Route path="/employees" element={<EmployeeList />} />
@@ -46,6 +52,9 @@ function App() {
               <Route path="/attendance/:id/edit" element={<AttendanceForm />} />
               <Route path="/leave-management" element={<LeaveManagement />} />
               <Route path="/reports" element={<Reports />} />
+              <Route path="/performance" element={<PerformanceReviewList />} />
+              <Route path="/performance/new" element={<PerformanceReviewForm />} />
+              <Route path="/performance/:id/edit" element={<PerformanceReviewForm />} />
             </Route>
 
             <Route element={<ProtectedRoute allowedRoles={['super_admin', 'hr_manager']} />}>

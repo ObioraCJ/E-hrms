@@ -30,6 +30,7 @@ export default function Layout() {
     { to: '/dashboard', label: 'Dashboard' },
     { to: '/my-leave', label: 'My Leave' },
     { to: '/my-payslips', label: 'My Payslips' },
+    { to: '/my-reviews', label: 'My Reviews' },
   ];
 
   const canManageSettings = user?.role === 'super_admin';
@@ -45,6 +46,7 @@ export default function Layout() {
     { to: '/payroll', label: 'Payroll', show: canManagePayroll },
     { to: '/announcements', label: 'Announcements', show: canManagePayroll },
     { to: '/settings', label: 'Settings', show: canManageSettings },
+    { to: '/performance', label: 'Performance', show: canManageEmployees },
   ].filter((link) => link.show);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);

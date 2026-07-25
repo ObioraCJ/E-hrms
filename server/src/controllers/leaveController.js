@@ -2,18 +2,11 @@ const { validationResult } = require('express-validator');
 const Leave = require('../models/Leave');
 const Employee = require('../models/Employee');
 const { createNotification } = require('../utils/createNotification');
+const getSettings = require('../utils/getSettings');
 
 // Simple hardcoded annual allocations per leave type, in days. A future
 // Settings module could make these configurable per company instead of
 // fixed constants - reasonable to hardcode for now.
-const ANNUAL_ALLOCATION = {
-  annual: 20,
-  sick: 10,
-  casual: 7,
-  maternity: 90,
-  paternity: 14,
-};
-
 // Counts calendar days inclusive of both start and end date -
 // e.g. Mon to Wed is 3 days, not 2.
 const countDays = (start, end) => {
@@ -114,6 +107,9 @@ exports.getMyBalance = async (req, res) => {
 // Shared helper: for a given employee, sums up approved leave days
 // taken THIS YEAR per type, and subtracts from the annual allocation.
 const computeBalance = async (employeeId) => {
+  const settings = await getSettings();
+  const allocations = settings.leaveAllocations;
+
   const startOfYear = new Date(new Date().getFullYear(), 0, 1);
 
   const approvedThisYear = await Leave.find({
@@ -127,14 +123,13 @@ const computeBalance = async (employeeId) => {
     used[leave.leaveType] += leave.numberOfDays;
   });
 
-  return Object.keys(ANNUAL_ALLOCATION).map((type) => ({
+  return Object.keys(allocations.toObject ? allocations.toObject() : allocations).map((type) => ({
     leaveType: type,
-    allocated: ANNUAL_ALLOCATION[type],
+    allocated: allocations[type],
     used: used[type],
-    remaining: ANNUAL_ALLOCATION[type] - used[type],
+    remaining: allocations[type] - used[type],
   }));
 };
-
 // ---- ALL LEAVE REQUESTS (HR/managers) ----
 exports.getAllLeaves = async (req, res) => {
   try {

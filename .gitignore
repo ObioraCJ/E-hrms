@@ -20,3 +20,5 @@ Thumbs.db
 # Uploads (local dev files, don't need to be tracked)
 server/src/uploads/*
 !server/src/uploads/.gitkeep
+
+server/uploads/

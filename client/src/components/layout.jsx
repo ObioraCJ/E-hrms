@@ -37,6 +37,8 @@ export default function Layout() {
   // Links that only show up for HR/admin/department-manager roles,
   // tucked into the "Manage" dropdown instead of the main row so the
   // top-level nav doesn't get overcrowded as more modules get added.
+  const canManageRecruitment = user?.role === 'super_admin' || user?.role === 'hr_manager';
+
   const manageLinks = [
     { to: '/employees', label: 'Employees', show: canManageEmployees },
     { to: '/departments', label: 'Departments', show: canManageEmployees },
@@ -47,6 +49,7 @@ export default function Layout() {
     { to: '/announcements', label: 'Announcements', show: canManagePayroll },
     { to: '/settings', label: 'Settings', show: canManageSettings },
     { to: '/performance', label: 'Performance', show: canManageEmployees },
+    { to: '/recruitment/vacancies', label: 'Recruitment', show: canManageRecruitment },
   ].filter((link) => link.show);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);

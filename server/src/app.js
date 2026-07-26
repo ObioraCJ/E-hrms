@@ -16,7 +16,7 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const reportRoutes = require('./routes/reportRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 const performanceRoutes = require('./routes/performanceRoutes');
-
+const recruitmentRoutes = require('./routes/recruitmentRoutes');
 
 const app = express();
 
@@ -37,6 +37,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/performance', performanceRoutes);
+app.use('/api/recruitment', recruitmentRoutes);
 
 app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
 

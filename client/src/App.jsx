@@ -23,6 +23,12 @@ import MyReviews from './pages/MyReviews';
 import MyReviewDetail from './pages/MyReviewDetail';
 import PerformanceReviewList from './pages/PerformanceReviewList';
 import PerformanceReviewForm from './pages/PerformanceReviewForm';
+import PublicJobs from './pages/PublicJobs';
+import PublicJobDetail from './pages/PublicJobDetail';
+import VacancyList from './pages/VacancyList';
+import VacancyForm from './pages/VacancyForm';
+import ApplicationList from './pages/ApplicationList';
+import ApplicationDetail from './pages/ApplicationDetail';
 
 
 function App() {
@@ -30,6 +36,8 @@ function App() {
     <AuthProvider>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/careers" element={<PublicJobs />} />
+        <Route path="/careers/:id" element={<PublicJobDetail />} />
 
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
@@ -61,6 +69,10 @@ function App() {
               <Route path="/payroll" element={<PayrollManagement />} />
               <Route path="/payroll/:id/edit" element={<PayrollForm />} />
               <Route path="/announcements" element={<Announcements />} />
+              <Route path="/recruitment/vacancies" element={<VacancyList />} />
+              <Route path="/recruitment/vacancies/new" element={<VacancyForm />} />
+              <Route path="/recruitment/applications" element={<ApplicationList />} />
+              <Route path="/recruitment/applications/:id" element={<ApplicationDetail />} />
             </Route>
           </Route>
         </Route>

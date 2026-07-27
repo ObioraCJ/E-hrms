@@ -29,7 +29,8 @@ import VacancyList from './pages/VacancyList';
 import VacancyForm from './pages/VacancyForm';
 import ApplicationList from './pages/ApplicationList';
 import ApplicationDetail from './pages/ApplicationDetail';
-
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   return (
@@ -38,6 +39,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/careers" element={<PublicJobs />} />
         <Route path="/careers/:id" element={<PublicJobDetail />} />
+       <Route path="/forgot-password" element={<ForgotPassword />} />
+       <Route path="/reset-password/:token" element={<ResetPassword />} />
 
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>

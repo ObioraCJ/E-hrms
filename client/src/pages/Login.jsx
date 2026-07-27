@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logo from "../assets/Ehrm.png";
 
@@ -129,6 +129,18 @@ export default function Login() {
                   </span>
                   <span className="ml-3 text-sm text-slate-700">Remember me</span>
                 </label>
+                <div className="flex items-start flex-wrap gap-2">
+                 <label className="flex items-center group has-[input:checked]:text-slate-900 cursor-pointer">
+                  {/* ...existing remember-me checkbox... */}
+                 </label>
+
+                  <Link
+                   to="/forgot-password"
+                   className="ml-auto text-sm text-blue-600 hover:underline"
+                  >
+                   Forgot password?
+                  </Link>
+                  </div>
               </div>
 
               {error && (

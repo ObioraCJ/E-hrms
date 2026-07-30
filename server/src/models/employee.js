@@ -79,6 +79,11 @@ const employeeSchema = new mongoose.Schema(
       type: Number,
       min: 0,
     },
+
+    profilePicture: {
+  type: String, // path to the uploaded image file
+  default: null,
+},
   },
   { timestamps: true }
 );

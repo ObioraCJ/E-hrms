@@ -18,6 +18,7 @@ const settingsRoutes = require('./routes/settingsRoutes');
 const performanceRoutes = require('./routes/performanceRoutes');
 const recruitmentRoutes = require('./routes/recruitmentRoutes');
 
+
 const app = express();
 
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
@@ -45,5 +46,9 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Something went wrong' });
 });
+const path = require('path');
+
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
 
 module.exports = app;

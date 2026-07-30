@@ -30,6 +30,7 @@ export default function Layout() {
     { to: '/dashboard', label: 'Dashboard' },
     { to: '/my-leave', label: 'Leave' },
     { to: '/my-payslips', label: 'Payslips' },
+    { to: '/org-chart', label: 'Org Chart' },
     { to: '/my-reviews', label: 'Reviews' },
     { to: '/my-profile', label: 'Profile' },
   ];

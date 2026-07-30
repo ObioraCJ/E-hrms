@@ -9,6 +9,7 @@ const {
   getMyProfile,
   updateMyProfile,
   uploadMyProfilePicture,
+  getOrgChart,
 } = require('../controllers/employeeController');
 const {
   createEmployeeValidator,
@@ -27,6 +28,7 @@ const uploadProfilePicture = require('../config/uploadProfilePicture');
 router.get('/me', protect, getMyProfile);
 router.put('/me', protect, updateMyProfile);
 router.post('/me/picture', protect, uploadProfilePicture.single('picture'), uploadMyProfilePicture);
+router.get('/org-chart', protect, getOrgChart);
 
 router.post('/', protect, authorize('super_admin', 'hr_manager'), createEmployeeValidator, createEmployee);
 router.get('/', protect, authorize('super_admin', 'hr_manager', 'department_manager'), getEmployees);

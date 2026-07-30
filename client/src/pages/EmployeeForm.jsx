@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { createEmployee, updateEmployee, getEmployeeById } from '../api/employees';
+import { createEmployee, updateEmployee, getEmployeeById, getEmployees } from '../api/employees';
 
 const initialFormState = {
   firstName: '',
@@ -18,6 +18,7 @@ const initialFormState = {
   employmentType: 'full-time',
   status: 'active',
   salary: '',
+  manager: '',
 };
 
 export default function EmployeeForm() {
@@ -26,9 +27,24 @@ export default function EmployeeForm() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState(initialFormState);
+  const [employeeOptions, setEmployeeOptions] = useState([]);
   const [loading, setLoading] = useState(isEditMode);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  // Loads every employee to populate the "Manager" dropdown - same
+  // pattern used in DepartmentForm.jsx.
+  useEffect(() => {
+    const loadEmployeeOptions = async () => {
+      try {
+        const { data } = await getEmployees({ limit: 500 });
+        setEmployeeOptions(data.employees);
+      } catch {
+        // Non-fatal - the form still works without manager options populated.
+      }
+    };
+    loadEmployeeOptions();
+  }, []);
 
   useEffect(() => {
     if (!isEditMode) return;
@@ -53,6 +69,7 @@ export default function EmployeeForm() {
           employmentType: emp.employmentType || 'full-time',
           status: emp.status || 'active',
           salary: emp.salary ?? '',
+          manager: emp.manager?._id || emp.manager || '',
         });
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to load employee');
@@ -76,7 +93,7 @@ export default function EmployeeForm() {
 
     try {
       if (isEditMode) {
-        const { department, designation, dateOfJoining, dateOfBirth, gender, phone, address, employmentType, status, salary } = form;
+        const { department, designation, dateOfJoining, dateOfBirth, gender, phone, address, employmentType, status, salary, manager } = form;
         await updateEmployee(id, {
           department,
           designation,
@@ -88,11 +105,13 @@ export default function EmployeeForm() {
           employmentType,
           status,
           salary: salary === '' ? undefined : Number(salary),
+          manager: manager || null,
         });
       } else {
         await createEmployee({
           ...form,
           salary: form.salary === '' ? undefined : Number(form.salary),
+          manager: form.manager || undefined,
         });
       }
       navigate('/employees');
@@ -110,6 +129,11 @@ export default function EmployeeForm() {
   if (loading) {
     return <p className="text-slate-400">Loading...</p>;
   }
+
+  // Excludes the employee themselves from their own manager options -
+  // prevents someone from accidentally being set as their own manager,
+  // which would create a broken/circular reporting relationship.
+  const managerOptions = employeeOptions.filter((emp) => emp._id !== id);
 
   return (
     <div className="max-w-2xl">
@@ -147,6 +171,26 @@ export default function EmployeeForm() {
         <div className="grid grid-cols-2 gap-4">
           <Field label="Department" name="department" value={form.department} onChange={handleChange} required />
           <Field label="Designation" name="designation" value={form.designation} onChange={handleChange} required />
+        </div>
+
+        <div>
+          <label htmlFor="manager" className="mb-1 block text-sm font-medium text-slate-700">
+            Manager
+          </label>
+          <select
+            id="manager"
+            name="manager"
+            value={form.manager}
+            onChange={handleChange}
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+          >
+            <option value="">No manager (top of hierarchy)</option>
+            {managerOptions.map((emp) => (
+              <option key={emp._id} value={emp._id}>
+                {emp.user?.firstName} {emp.user?.lastName} ({emp.employeeId})
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="grid grid-cols-2 gap-4">

@@ -18,3 +18,5 @@ export const updateMyProfile = (updates) => api.put('/employees/me', updates);
 
 export const uploadMyProfilePicture = (formData) =>
   api.post('/employees/me/picture', formData);
+
+export const getOrgChart = () => api.get('/employees/org-chart');

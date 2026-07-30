@@ -32,26 +32,29 @@ import ApplicationDetail from './pages/ApplicationDetail';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import MyProfile from './pages/MyProfile';
+import OrgChart from './pages/OrgChart';
 
 function App() {
   return (
     <AuthProvider>
       <Routes>
+        {/* Genuinely public routes - no login required at all */}
         <Route path="/login" element={<Login />} />
         <Route path="/careers" element={<PublicJobs />} />
         <Route path="/careers/:id" element={<PublicJobDetail />} />
-       <Route path="/forgot-password" element={<ForgotPassword />} />
-       <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
 
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/my-leave" element={<MyLeave />} />
             <Route path="/my-payslips" element={<MyPayslips />} />
-              <Route path="/my-payslips/:id" element={<PayslipDetail />} />
-              <Route path="/my-reviews" element={<MyReviews />} />
-              <Route path="/my-reviews/:id" element={<MyReviewDetail />} />
-              <Route path="/my-profile" element={<MyProfile />} />
+            <Route path="/my-payslips/:id" element={<PayslipDetail />} />
+            <Route path="/my-reviews" element={<MyReviews />} />
+            <Route path="/my-reviews/:id" element={<MyReviewDetail />} />
+            <Route path="/my-profile" element={<MyProfile />} />
+            <Route path="/org-chart" element={<OrgChart />} />
 
             <Route element={<ProtectedRoute allowedRoles={['super_admin', 'hr_manager', 'department_manager']} />}>
               <Route path="/employees" element={<EmployeeList />} />
@@ -79,13 +82,13 @@ function App() {
               <Route path="/recruitment/applications" element={<ApplicationList />} />
               <Route path="/recruitment/applications/:id" element={<ApplicationDetail />} />
             </Route>
+
+            <Route element={<ProtectedRoute allowedRoles={['super_admin']} />}>
+              <Route path="/settings" element={<Settings />} />
+            </Route>
           </Route>
         </Route>
-        
-        <Route element={<ProtectedRoute allowedRoles={['super_admin']} />}>
-          <Route path="/settings" element={<Settings />} />
-        </Route>
-        
+
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </AuthProvider>

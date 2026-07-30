@@ -305,3 +305,21 @@ exports.uploadMyProfilePicture = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+// ---- ORG CHART (any logged-in user can view) ----
+// Returns a flat list of active employees with just enough info to
+// build a hierarchy client-side - the frontend does the actual tree
+// construction, since that's cheap in JS and keeps this endpoint simple.
+exports.getOrgChart = async (req, res) => {
+  try {
+    const employees = await Employee.find({ status: { $ne: 'terminated' } })
+      .populate('user', 'firstName lastName')
+      .select('employeeId department designation manager profilePicture user')
+      .lean(); // .lean() returns plain JS objects instead of full Mongoose
+      // documents - faster, and all we need here is to read the data,
+      // not call any Mongoose document methods on it.
+
+    res.status(200).json({ employees });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};

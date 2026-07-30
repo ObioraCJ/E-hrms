@@ -28,9 +28,10 @@ export default function Layout() {
   // Links every logged-in user sees directly in the top-level nav.
   const primaryLinks = [
     { to: '/dashboard', label: 'Dashboard' },
-    { to: '/my-leave', label: 'My Leave' },
-    { to: '/my-payslips', label: 'My Payslips' },
-    { to: '/my-reviews', label: 'My Reviews' },
+    { to: '/my-leave', label: 'Leave' },
+    { to: '/my-payslips', label: 'Payslips' },
+    { to: '/my-reviews', label: 'Reviews' },
+    { to: '/my-profile', label: 'Profile' },
   ];
 
   const canManageSettings = user?.role === 'super_admin';

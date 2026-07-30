@@ -3,6 +3,7 @@ const Employee = require('../models/Employee');
 const User = require('../models/User');
 const generateEmployeeId = require('../utils/generateEmployeeId');
 const { createNotificationForMany } = require('../utils/createNotification');
+const fs = require('fs');
 
 // ---- CREATE ----
 // Creates a User (login credentials) and an Employee (HR profile) together,
@@ -219,6 +220,87 @@ exports.deleteEmployee = async (req, res) => {
     await User.findByIdAndUpdate(employee.user, { isActive: false });
 
     res.status(200).json({ message: 'Employee terminated and access revoked' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+// ---- MY PROFILE (self, read) ----
+exports.getMyProfile = async (req, res) => {
+  try {
+    const employee = await Employee.findOne({ user: req.user._id }).populate(
+      'user',
+      'firstName lastName email role isActive'
+    );
+
+    if (!employee) {
+      return res.status(404).json({ message: 'No employee profile linked to this account' });
+    }
+
+    res.status(200).json({ employee });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+// ---- MY PROFILE (self, update) ----
+// Deliberately only allows a small whitelist of fields - department,
+// designation, salary, status, dateOfJoining etc. remain HR-controlled
+// only, matching the existing updateEmployee endpoint's restriction to
+// admin/hr_manager. Self-service editing is limited to personal contact
+// details, not employment terms.
+exports.updateMyProfile = async (req, res) => {
+  try {
+    const employee = await Employee.findOne({ user: req.user._id });
+    if (!employee) {
+      return res.status(404).json({ message: 'No employee profile linked to this account' });
+    }
+
+    const allowedSelfEditFields = ['phone', 'address', 'dateOfBirth'];
+    allowedSelfEditFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        employee[field] = req.body[field];
+      }
+    });
+
+    await employee.save();
+    await employee.populate('user', 'firstName lastName email role isActive');
+
+    res.status(200).json({ message: 'Profile updated', employee });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+// ---- MY PROFILE PICTURE (self, upload) ----
+exports.uploadMyProfilePicture = async (req, res) => {
+  try {
+    const employee = await Employee.findOne({ user: req.user._id });
+    if (!employee) {
+      if (req.file) fs.unlink(req.file.path, () => {});
+      return res.status(404).json({ message: 'No employee profile linked to this account' });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'An image file is required' });
+    }
+
+    // Clean up the previous picture file (if one exists) before saving
+    // the reference to the new one - otherwise old, unused image files
+    // would silently pile up on disk forever, one per upload.
+    if (employee.profilePicture && fs.existsSync(employee.profilePicture)) {
+      fs.unlink(employee.profilePicture, () => {});
+    }
+
+    employee.profilePicture = req.file.path;
+    await employee.save();
+
+    // Convert the disk path into a URL the frontend can actually use
+    // as an <img src>, relative to how app.js serves /uploads.
+    const relativePath = req.file.path.split('uploads')[1].replace(/\\/g, '/');
+    const pictureUrl = `/uploads${relativePath}`;
+
+    res.status(200).json({ message: 'Profile picture updated', pictureUrl });
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }

@@ -11,3 +11,10 @@ export const createEmployee = (employeeData) => api.post('/employees', employeeD
 export const updateEmployee = (id, updates) => api.put(`/employees/${id}`, updates);
 
 export const deleteEmployee = (id) => api.delete(`/employees/${id}`);
+
+export const getMyProfile = () => api.get('/employees/me');
+
+export const updateMyProfile = (updates) => api.put('/employees/me', updates);
+
+export const uploadMyProfilePicture = (formData) =>
+  api.post('/employees/me/picture', formData);

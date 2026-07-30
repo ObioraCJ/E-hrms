@@ -31,6 +31,7 @@ import ApplicationList from './pages/ApplicationList';
 import ApplicationDetail from './pages/ApplicationDetail';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import MyProfile from './pages/MyProfile';
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
               <Route path="/my-payslips/:id" element={<PayslipDetail />} />
               <Route path="/my-reviews" element={<MyReviews />} />
               <Route path="/my-reviews/:id" element={<MyReviewDetail />} />
+              <Route path="/my-profile" element={<MyProfile />} />
 
             <Route element={<ProtectedRoute allowedRoles={['super_admin', 'hr_manager', 'department_manager']} />}>
               <Route path="/employees" element={<EmployeeList />} />

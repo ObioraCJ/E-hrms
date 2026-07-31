@@ -73,7 +73,7 @@ export default function Layout() {
   const isOnManagePage = manageLinks.some((link) => location.pathname.startsWith(link.to));
 
   return (
-    <div className="min-h-screen bg-slate-50">
+   <div className="flex min-h-screen flex-col bg-slate-50">
       <header className="border-b border-slate-200 bg-white px-4 py-3 sm:px-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4 lg:gap-6">
@@ -234,9 +234,16 @@ export default function Layout() {
         )}
       </header>
 
-      <main className="p-4 sm:p-6">
+    <main className="flex-1 p-4 sm:p-6">
         <Outlet />
       </main>
+
+      <footer className="border-t border-slate-200 bg-white px-4 py-4 sm:px-6">
+        <div className="flex flex-col items-center justify-between gap-2 text-xs text-slate-400 sm:flex-row">
+          <span>© {new Date().getFullYear()} E-HRMS. All rights reserved.</span>
+          <span>Employee HR Management System</span>
+        </div>
+      </footer>
     </div>
   );
 }

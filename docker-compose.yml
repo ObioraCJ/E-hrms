@@ -1,0 +1,27 @@
+services:
+  server:
+    build: ./server
+    restart: unless-stopped
+    env_file:
+      - ./server/.env
+    volumes:
+      - uploads-data:/app/uploads
+    networks:
+    - app-network
+
+  client:
+    build: ./client
+    restart: unless-stopped
+    ports: 
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - app-network
+  
+volumes:
+  uploads-data:
+
+networks:
+  app-network:
+    driver: bridge
